@@ -94,6 +94,10 @@ return [
                 'postmark',
             ],
         ],
+        'to' => [
+            'address' => env('MAIL_TO_ADDRESS', 'contato@empresa.com'),
+            'name' => 'MAIL_TO_NAME', 'Admin',
+        ]
 
     ],
 
