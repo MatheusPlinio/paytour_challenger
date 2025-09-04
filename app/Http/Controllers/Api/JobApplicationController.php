@@ -6,28 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreJobApplicationRequest;
 use App\Mail\JobApplicationReceived;
 use App\Models\JobApplication;
+use App\Repositories\Contracts\JobApplicationRepositoryInterface;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 class JobApplicationController extends Controller
 {
+    public function __construct(protected JobApplicationRepositoryInterface $repository)
+    {
+    }
     public function store(StoreJobApplicationRequest $request)
     {
         $data = $request->validated();
 
         $path = $request->file('resume_file')->store('resumes', 'public');
 
-        $job_application = JobApplication::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'desired_position' => $data['desired_position'],
-            'education_level' => $data['education_level'],
-            'observations' => $data['observations'] ?? null,
-            'resume_path' => $path,
-            'ip_address' => $request->ip(),
-            'submitted_at' => now(),
-        ]);
+        $job_application = $this->repository->store($data, $path, $request->ip());
 
         if (!$job_application) {
             return response()->json(["message" => "Erro ao enviar curriculo"], Response::HTTP_INTERNAL_SERVER_ERROR);
