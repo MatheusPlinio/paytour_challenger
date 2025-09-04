@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Form from '@/pages/Form.vue';
+import JobApplication from '@/pages/JobApplication.vue';
 
 const routes = [
-    { path: '/formulario', component: Form }
+    { path: '/', component: JobApplication }
 ];
 
 const router = createRouter({
