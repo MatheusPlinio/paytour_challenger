@@ -9,6 +9,7 @@ use App\Mail\JobApplicationReceived;
 use App\Models\JobApplication;
 use App\Repositories\Contracts\JobApplicationRepositoryInterface;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class JobApplicationController extends Controller
@@ -17,11 +18,21 @@ class JobApplicationController extends Controller
     {
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return new JobApplicationsResource(
-            JobApplication::all()
-        );
+        $perPage = $request->query('per_page', 10);
+
+        $applications = JobApplication::orderBy('submitted_at', 'desc')->paginate($perPage);
+
+        return JobApplicationsResource::collection($applications)
+            ->additional([
+                'meta' => [
+                    'current_page' => $applications->currentPage(),
+                    'last_page' => $applications->lastPage(),
+                    'per_page' => $applications->perPage(),
+                    'total' => $applications->total(),
+                ]
+            ]);
     }
     public function store(StoreJobApplicationRequest $request)
     {
