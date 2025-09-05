@@ -50,7 +50,7 @@ export function useJobApplicationForm() {
         data.append('resume_file', form.value.resume_file);
 
         try {
-            const response = await axios.post('/api/v1/job-applications', data, {
+            const response = await axios.post('/api/v1/job-applications/store', data, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
