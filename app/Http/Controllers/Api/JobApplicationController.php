@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreJobApplicationRequest;
+use App\Http\Resources\JobApplicationsResource;
 use App\Mail\JobApplicationReceived;
 use App\Models\JobApplication;
 use App\Repositories\Contracts\JobApplicationRepositoryInterface;
@@ -14,6 +15,13 @@ class JobApplicationController extends Controller
 {
     public function __construct(protected JobApplicationRepositoryInterface $repository)
     {
+    }
+
+    public function index()
+    {
+        return new JobApplicationsResource(
+            JobApplication::all()
+        );
     }
     public function store(StoreJobApplicationRequest $request)
     {
@@ -30,5 +38,23 @@ class JobApplicationController extends Controller
         Mail::to(config('mail.mailers.to.address'))->send(new JobApplicationReceived($job_application));
 
         return response()->json(["message" => "Curiculo enviado com sucesso"], Response::HTTP_CREATED);
+    }
+
+    public function show(JobApplication $job_application)
+    {
+        return JobApplicationsResource::collection(
+            $job_application
+        );
+    }
+
+    public function delete(JobApplication $job_application)
+    {
+        $delete = $job_application->delete();
+
+        if (!$delete) {
+            return response()->json(["message" => "Erro ao deletar curriculo"], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return response()->json(["message" => "Curiculo deletado com sucesso"], Response::HTTP_OK);
     }
 }

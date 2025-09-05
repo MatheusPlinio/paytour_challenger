@@ -25,7 +25,7 @@ export function useAuth() {
     const login = async (): Promise<void> => {
         try {
             const res = await axios.post<LoginResponse>(
-                import.meta.env.VITE_API_URL + "api/v1/login",
+                import.meta.env.VITE_API_URL + "api/v1/auth/login",
                 {
                     email: email.value,
                     password: password.value,
@@ -42,7 +42,7 @@ export function useAuth() {
     const register = async (): Promise<void> => {
         try {
             const res = await axios.post<RegisterResponse>(
-                import.meta.env.VITE_API_URL + "api/v1/register",
+                `${import.meta.env.VITE_API_URL}/api/v1/auth/register`,
                 {
                     name: name.value,
                     email: email.value,

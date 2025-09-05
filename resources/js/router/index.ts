@@ -11,8 +11,8 @@ const routes = [
         component: LayoutHeader,
         children: [
             { path: "", component: Dashboard, meta: { requiresAuth: true } },
-            { path: "/login", component: Login },
-            { path: "/register", component: Register },
+            { path: "/login", component: Login, meta: { guest: true } },
+            { path: "/register", component: Register, meta: { guest: true } },
             { path: '/trabalhe-conosco', component: JobApplication }
         ]
     }
@@ -27,7 +27,10 @@ router.beforeEach((to, from, next) => {
     const token = localStorage.getItem("token")
     if (to.meta.requiresAuth && !token) {
         next("/login")
-    } else {
+    } else if (to.meta.guest && token) {
+        next("/");
+    }
+    else {
         next()
     }
 })
