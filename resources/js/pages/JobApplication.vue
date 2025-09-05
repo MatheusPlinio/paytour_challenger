@@ -28,7 +28,7 @@
 
             <input type="file" @change="handleFileUpload" class="border p-2 rounded w-full cursor-pointer" required />
 
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+            <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-200 cursor-pointer"
                 :disabled="loading">
                 {{ loading ? 'Enviando...' : 'Enviar Currículo' }}
             </button>
