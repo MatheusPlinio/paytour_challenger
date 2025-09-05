@@ -10,12 +10,16 @@
                 <router-link to="/trabalhe-conosco" class="hover:underline">
                     Trabalhe Conosco
                 </router-link>
-                <router-link to="/login" class="hover:underline">
+                <router-link v-if="!isAuthenticated" to="/login" class="hover:underline">
                     Login
                 </router-link>
-                <router-link to="/register" class="hover:underline">
+                <router-link v-if="!isAuthenticated" to="/register" class="hover:underline">
                     Registrar
                 </router-link>
+                <button v-if="isAuthenticated" @click="logout"
+                    class="ml-auto bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md cursor-pointer">
+                    Sair
+                </button>
             </nav>
         </header>
 
@@ -26,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import api from "@/lib/api"
 import { ref, onMounted } from "vue"
 
 const appName = import.meta.env.VITE_APP_NAME
@@ -36,8 +41,20 @@ onMounted(() => {
     isAuthenticated.value = !!localStorage.getItem("token")
 })
 
-const logout = () => {
-    localStorage.removeItem("token")
-    window.location.href = "/login"
+const logout = async () => {
+    try {
+        await api.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/logout`, {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        })
+
+        localStorage.removeItem("token")
+        window.location.href = "/login"
+    } catch (err) {
+        console.error("Erro ao deslogar:", err)
+        localStorage.removeItem("token")
+        window.location.href = "/"
+    }
 }
 </script>
