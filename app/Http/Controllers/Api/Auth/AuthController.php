@@ -38,9 +38,9 @@ class AuthController extends Controller
     {
         $data = $request->validated();
 
-        $user = User::where('email', $data->email)->first();
+        $user = User::where('email', $data['email'])->first();
 
-        if (!$user || !Hash::check($data->password, $user->password)) {
+        if (!$user || !Hash::check($data['password'], $user->password)) {
             return response()->json(['message' => 'Credenciais inválidas'], Response::HTTP_UNAUTHORIZED);
         }
 

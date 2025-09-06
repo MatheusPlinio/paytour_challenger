@@ -16,7 +16,7 @@ interface JobApplicationRepositoryInterface
      *     desired_position: string,
      *     education_level: string,
      *     observations?: string|null,
-     *     resume_file: \Illuminate\Http\UploadedFile
+     *     resume_path: \Illuminate\Http\UploadedFile
      * } $data
      * @return JobApplication
      */

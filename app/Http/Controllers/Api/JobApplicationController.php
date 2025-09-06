@@ -38,7 +38,7 @@ class JobApplicationController extends Controller
     {
         $data = $request->validated();
 
-        $path = $request->file('resume_file')->store('resumes', 'public');
+        $path = $request->file('resume_path')->store('resumes', 'public');
 
         $job_application = $this->repository->store($data, $path, $request->ip());
 
@@ -53,9 +53,7 @@ class JobApplicationController extends Controller
 
     public function show(JobApplication $job_application)
     {
-        return JobApplicationsResource::collection(
-            $job_application
-        );
+        return new JobApplicationsResource($job_application);
     }
 
     public function delete(JobApplication $job_application)
