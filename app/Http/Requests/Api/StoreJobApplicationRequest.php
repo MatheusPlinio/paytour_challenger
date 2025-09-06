@@ -28,7 +28,7 @@ class StoreJobApplicationRequest extends FormRequest
             'desired_position' => 'required|string|max:255',
             'education_level' => 'required|string|max:100',
             'observations' => 'nullable',
-            'resume_file' => [
+            'resume_path' => [
                 'required',
                 'mimes:doc,docx,pdf',
                 'max:1048576',

@@ -8,7 +8,7 @@ export interface FormDataType {
     desired_position: string;
     education_level: string;
     observations?: string;
-    resume_file?: File | null;
+    resume_path?: File | null;
 }
 
 export function useJobApplicationForm() {
@@ -19,7 +19,7 @@ export function useJobApplicationForm() {
         desired_position: '',
         education_level: '',
         observations: '',
-        resume_file: null,
+        resume_path: null,
     });
 
     const loading = ref(false);
@@ -29,12 +29,12 @@ export function useJobApplicationForm() {
     function handleFileUpload(event: Event) {
         const target = event.target as HTMLInputElement;
         if (target.files && target.files.length > 0) {
-            form.value.resume_file = target.files[0];
+            form.value.resume_path = target.files[0];
         }
     }
 
     async function submitForm() {
-        if (!form.value.resume_file) return;
+        if (!form.value.resume_path) return;
 
         loading.value = true;
         message.value = '';
@@ -47,7 +47,7 @@ export function useJobApplicationForm() {
         data.append('desired_position', form.value.desired_position);
         data.append('education_level', form.value.education_level);
         if (form.value.observations) data.append('observations', form.value.observations);
-        data.append('resume_file', form.value.resume_file);
+        data.append('resume_path', form.value.resume_path);
 
         try {
             const response = await axios.post('/api/v1/job-applications/store', data, {
@@ -64,7 +64,7 @@ export function useJobApplicationForm() {
                 desired_position: '',
                 education_level: '',
                 observations: '',
-                resume_file: null,
+                resume_path: null,
             };
         } catch (error: any) {
             message.value = error.response?.data?.message || 'Erro ao enviar currículo';
